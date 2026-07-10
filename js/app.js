@@ -1,140 +1,137 @@
+// ==========================================
+//          VENOMROOT V2
+// ==========================================
+
+
 // ================= LOADER =================
 
 window.addEventListener("load", () => {
 
     const loader = document.querySelector(".loader");
 
-    setTimeout(() => {
+    if (loader) {
 
-        loader.style.display = "none";
+        setTimeout(() => {
 
-    }, 2500);
+            loader.style.opacity = "0";
+
+            loader.style.transition = "0.8s ease";
+
+            setTimeout(() => {
+
+                loader.remove();
+
+            }, 800);
+
+        }, 2200);
+
+    }
 
 });
 
 
 
-
-// ================= CART SYSTEM =================
-
+// ================= CART =================
 
 let cart = [];
 
-const cartCount = document.getElementById("cart-count");
-
-const cartTotal = document.getElementById("cart-total");
-
-const cartSidebar = document.querySelector(".cart-sidebar");
-
 const cartButton = document.querySelector(".cart-button");
-
+const cartSidebar = document.querySelector(".cart-sidebar");
 const closeCart = document.querySelector(".close-cart");
 
 const cartItems = document.querySelector(".cart-items");
-
+const cartCount = document.getElementById("cart-count");
+const cartTotal = document.getElementById("cart-total");
 
 
 
 // OPEN CART
 
-cartButton.addEventListener("click", () => {
+if (cartButton) {
 
-    cartSidebar.classList.add("active");
+    cartButton.addEventListener("click", () => {
 
-});
+        cartSidebar.classList.add("active");
 
+    });
+
+}
 
 
 
 // CLOSE CART
 
-closeCart.addEventListener("click", () => {
+if (closeCart) {
 
-    cartSidebar.classList.remove("active");
+    closeCart.addEventListener("click", () => {
 
-});
+        cartSidebar.classList.remove("active");
+
+    });
+
+}
 
 
 
-
-// ADD PRODUCTS
+// ADD TO CART
 
 const addButtons = document.querySelectorAll(".add-cart-btn");
 
-
 addButtons.forEach(button => {
-
 
     button.addEventListener("click", () => {
 
-
         const card = button.closest(".product-card");
-
 
         const product = {
 
             name: card.querySelector("h3").innerText,
 
             price: Number(
+
                 card.querySelector("span")
                     .innerText
                     .replace("$", "")
+
             )
 
         };
 
-
         cart.push(product);
-
 
         updateCart();
 
-
         button.innerText = "Added ✓";
-
 
         setTimeout(() => {
 
             button.innerText = "Add to Cart";
 
-        }, 1200);
-
+        }, 1000);
 
     });
-
 
 });
 
 
 
-
+// UPDATE CART
 
 function updateCart() {
 
-
-    cartCount.innerText = cart.length;
-
-
     cartItems.innerHTML = "";
-
 
     let total = 0;
 
-
-
     cart.forEach(item => {
-
 
         total += item.price;
 
+        const div = document.createElement("div");
 
-        const product = document.createElement("div");
+        div.classList.add("cart-product");
 
-
-        product.classList.add("cart-product");
-
-
-        product.innerHTML = `
+        div.innerHTML = `
 
             <h3>${item.name}</h3>
 
@@ -142,115 +139,63 @@ function updateCart() {
 
         `;
 
-
-        cartItems.appendChild(product);
-
+        cartItems.appendChild(div);
 
     });
-
-
 
     if (cart.length === 0) {
 
         cartItems.innerHTML = `
+
             <p class="empty-cart">
-            Your cart is empty.
+
+                Your cart is empty.
+
             </p>
+
         `;
 
     }
 
-
+    cartCount.innerText = cart.length;
 
     cartTotal.innerText = total;
 
-
 }
-
-
-
-
-
-// ================= SCROLL REVEAL =================
-
+// ==========================================
+//      SCROLL REVEAL
+// ==========================================
 
 const reveals = document.querySelectorAll(".reveal");
 
-
-window.addEventListener("scroll", () => {
-
+function revealSections() {
 
     reveals.forEach(section => {
 
+        const top = section.getBoundingClientRect().top;
 
-        const position = section.getBoundingClientRect().top;
-
-
-        if (position < window.innerHeight - 100) {
+        if (top < window.innerHeight - 120) {
 
             section.classList.add("show");
 
         }
 
-
     });
 
+}
 
-});
+window.addEventListener("scroll", revealSections);
 
-
-
-
-
-// ================= CUSTOM CURSOR =================
-
-
-const cursor = document.querySelector(".cursor");
-
-
-document.addEventListener("mousemove", (e) => {
-
-
-    cursor.style.left = e.clientX + "px";
-
-    cursor.style.top = e.clientY + "px";
-
-
-});
+revealSections();
 
 
 
-
-
-// ================= BUTTON GLOW =================
-
-
-const buttons = document.querySelectorAll("button");
-
-
-buttons.forEach(btn => {
-
-
-    btn.addEventListener("mouseenter", () => {
-
-        btn.style.transform = "scale(1.05)";
-
-    });
-
-
-    btn.addEventListener("mouseleave", () => {
-
-        btn.style.transform = "scale(1)";
-
-    });
-
-
-});
-// MOBILE MENU
+// ==========================================
+//      MOBILE MENU
+// ==========================================
 
 const menuBtn = document.getElementById("menu-btn");
 const nav = document.querySelector(".navbar nav");
-
 
 if (menuBtn) {
 
@@ -261,144 +206,235 @@ if (menuBtn) {
     });
 
 }
-// ================= MOUSE GLOW =================
 
 
-document.addEventListener("mousemove", (e) => {
 
+// ==========================================
+//      BUTTON ANIMATION
+// ==========================================
 
-    document.body.style.setProperty(
-        "--mouse-x",
-        e.clientX + "px"
-    );
+const buttons = document.querySelectorAll("button");
 
+buttons.forEach(button => {
 
-    document.body.style.setProperty(
-        "--mouse-y",
-        e.clientY + "px"
-    );
+    button.addEventListener("mouseenter", () => {
 
+        button.style.transform = "translateY(-3px)";
+
+    });
+
+    button.addEventListener("mouseleave", () => {
+
+        button.style.transform = "translateY(0px)";
+
+    });
 
 });
-window.addEventListener("load", () => {
 
-    const loader = document.querySelector(".loader");
 
-    if (loader) {
 
-        setTimeout(() => {
+// ==========================================
+//      NAVBAR SHADOW
+// ==========================================
 
-            loader.style.display = "none";
+const navbar = document.querySelector(".navbar");
 
-        }, 2500);
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 60) {
+
+        navbar.style.background = "rgba(0,0,0,.82)";
+
+        navbar.style.backdropFilter = "blur(18px)";
+
+        navbar.style.boxShadow = "0 10px 30px rgba(0,0,0,.35)";
+
+    }
+
+    else {
+
+        navbar.style.background = "rgba(0,0,0,.55)";
+
+        navbar.style.boxShadow = "none";
 
     }
 
 });
 
-const drone = document.getElementById("drone");
-
-if (drone) {
-
-    let x = window.innerWidth / 2;
-    let y = window.innerHeight / 2;
-
-    let targetX = x;
-    let targetY = y;
-
-    document.addEventListener("mousemove", (e) => {
-        targetX = e.clientX + 50;
-        targetY = e.clientY + 20;
-    });
-
-    function updateDrone() {
-
-        x += (targetX - x) * 0.08;
-        y += (targetY - y) * 0.08;
-
-        drone.style.transform = `translate(${x}px, ${y}px)`;
-
-        requestAnimationFrame(updateDrone);
-    }
-
-    updateDrone();
-
-}
-// ================= LENIS SMOOTH SCROLL =================
-
-const lenis = new Lenis({
-
-    duration: 1.3,
-
-    smoothWheel: true,
-
-    wheelMultiplier: 0.9,
-
-    touchMultiplier: 1.5,
-
-});
-
-function raf(time) {
-
-    lenis.raf(time);
-
-    requestAnimationFrame(raf);
-
-}
-
-requestAnimationFrame(raf);
-// LOOKBOOK PARALLAX
-
-document.querySelectorAll(".look-card").forEach(card => {
-
-    card.addEventListener("mousemove", e => {
-
-        const img = card.querySelector("img");
-
-        const rect = card.getBoundingClientRect();
-
-        const x = (e.clientX - rect.left - rect.width / 2) / 30;
-        const y = (e.clientY - rect.top - rect.height / 2) / 30;
-
-        img.style.transform =
-            `scale(1.08) translate(${x}px, ${y}px)`;
-
-    });
-
-    card.addEventListener("mouseleave", () => {
-
-        card.querySelector("img").style.transform =
-            "scale(1) translate(0,0)";
-
-    });
-
-});
-// ================= FINAL REVEAL =================
 
 
-const revealElements = document.querySelectorAll(".reveal");
+// ==========================================
+//      ACTIVE NAV LINK
+// ==========================================
 
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll(".navbar nav a");
 
-function reveal() {
+window.addEventListener("scroll", () => {
 
-    revealElements.forEach((element) => {
+    let current = "";
 
-        const top =
-            element.getBoundingClientRect().top;
+    sections.forEach(section => {
 
+        const top = section.offsetTop - 180;
 
-        if (top < window.innerHeight - 100) {
+        const height = section.offsetHeight;
 
-            element.classList.add("show");
+        if (window.scrollY >= top) {
+
+            current = section.getAttribute("id");
 
         }
 
     });
 
+    navLinks.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+
+            link.classList.add("active");
+
+        }
+
+    });
+
+});
+
+
+
+// ==========================================
+//      NEWSLETTER
+// ==========================================
+
+const newsletter = document.querySelector(".newsletter");
+
+if (newsletter) {
+
+    newsletter.addEventListener("submit", (e) => {
+
+        e.preventDefault();
+
+        const email = newsletter.querySelector("input");
+
+        if (email.value.trim() === "") {
+
+            alert("Please enter your email.");
+
+            return;
+
+        }
+
+        alert("Welcome to VENOMROOT 🖤");
+
+        email.value = "";
+
+    });
+
 }
 
 
-window.addEventListener("scroll", reveal);
+
+// ==========================================
+//      END
+// ==========================================
+
+console.log("VENOMROOT V2 Loaded Successfully 🖤");
+// ==========================================
+// VENOMROOT SYMBOL PARTICLES
+// ==========================================
+
+const canvas = document.getElementById("particles");
+
+if (canvas) {
+
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+
+        canvas.width = window.innerWidth;
+
+        canvas.height = window.innerHeight;
+
+    }
+
+    resize();
+
+    window.addEventListener("resize", resize);
 
 
-reveal();
+
+    const particles = [];
+
+    const total = 45;
+
+
+
+    for (let i = 0; i < total; i++) {
+
+        particles.push({
+
+            x: Math.random() * canvas.width,
+
+            y: Math.random() * canvas.height,
+
+            size: 12 + Math.random() * 10,
+
+            speedY: .15 + Math.random() * .35,
+
+            speedX: (Math.random() - .5) * .2,
+
+            alpha: .12 + Math.random() * .15,
+
+            rotation: Math.random() * 360
+
+        });
+
+    }
+
+
+
+    function animate() {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {
+
+            p.y -= p.speedY;
+
+            p.x += p.speedX;
+
+            p.rotation += .15;
+
+            if (p.y < -40) {
+
+                p.y = canvas.height + 40;
+
+                p.x = Math.random() * canvas.width;
+
+            }
+
+            ctx.save();
+
+            ctx.translate(p.x, p.y);
+
+            ctx.rotate(p.rotation * Math.PI / 180);
+
+            ctx.font = `${p.size}px serif`;
+
+            ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+
+            ctx.fillText("𖣂", 0, 0);
+
+            ctx.restore();
+
+        });
+
+        requestAnimationFrame(animate);
+
+    }
+
+    animate();
+
+}
